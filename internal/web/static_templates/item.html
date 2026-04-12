@@ -1,0 +1,37 @@
+{{define "item-body"}}
+<div class="item-header">
+  <h2>{{if .Item.Title}}{{.Item.Title}}{{else}}{{.Item.ID}}{{end}}</h2>
+  <div class="item-meta">
+    <span class="date-badge">{{.Item.Date}}</span>
+    <span>{{.Item.OCRPageCount}}/{{.Item.PageCount}} pages OCR&rsquo;d</span>
+    <a href="https://archive.org/details/{{.Item.ID}}" target="_blank" rel="noopener"
+       class="ia-link">View on Internet Archive &rarr;</a>
+  </div>
+  {{if .Item.Description}}
+  <p class="item-desc">{{.Item.Description}}</p>
+  {{end}}
+</div>
+
+{{if .Pages}}
+<div class="pages-grid">
+  {{range .Pages}}
+  <a href="/pages/{{.ID}}/" class="page-thumb {{if lt .OCRConfidence 50.0}}low-confidence{{end}}">
+    <div class="thumb-img">
+      <img src="{{iaThumbURL $.Item.ID .IAFilename}}" alt="Page {{inc .PageSeq}}" loading="lazy"
+           onerror="this.style.display='none'">
+    </div>
+    <div class="thumb-label">
+      <span>Page {{inc .PageSeq}}</span>
+      {{if gt .OCRConfidence 0.0}}
+      <span class="conf" title="OCR confidence">{{printf "%.0f" .OCRConfidence}}%</span>
+      {{else}}
+      <span class="conf no-ocr">no OCR</span>
+      {{end}}
+    </div>
+  </a>
+  {{end}}
+</div>
+{{else}}
+<p class="empty-state">No pages found for this item.</p>
+{{end}}
+{{end}}

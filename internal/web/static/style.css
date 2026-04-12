@@ -247,6 +247,20 @@ footer {
 
 .ocr-progress { color: #888; font-size: 0.8rem; }
 
+.ia-link {
+  font-size: 0.85rem;
+  color: #5a3e2b;
+  text-decoration: none;
+  border: 1px solid #c8b49a;
+  padding: 0.2rem 0.6rem;
+  border-radius: 3px;
+  margin-left: auto;
+}
+.ia-link:hover { background: #f0e8df; }
+
+.browse-hint { text-align: center; color: #666; margin-top: 1rem; }
+.pagefind-search { max-width: 640px; margin: 1.5rem auto 0; }
+
 /* ── Item detail ─────────────────────────────────────────────────────────── */
 .item-header {
   margin-bottom: 1.5rem;

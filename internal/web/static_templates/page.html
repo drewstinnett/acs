@@ -1,0 +1,63 @@
+{{define "page-body"}}
+<div class="page-nav">
+  {{if .PrevID}}
+  <a href="/pages/{{.PrevID}}/" class="btn-nav">&laquo; Prev</a>
+  {{else}}
+  <span class="btn-nav disabled">&laquo; Prev</span>
+  {{end}}
+
+  <span class="page-loc">
+    <a href="/items/{{.Page.ItemID}}/">{{.ItemTitle}}</a>
+    &mdash; Page {{inc .Page.PageSeq}}
+  </span>
+
+  {{if .NextID}}
+  <a href="/pages/{{.NextID}}/" class="btn-nav">Next &raquo;</a>
+  {{else}}
+  <span class="btn-nav disabled">Next &raquo;</span>
+  {{end}}
+</div>
+
+<div class="page-viewer">
+  <div class="page-image-panel">
+    <a href="{{iaImageURL .Page.ItemID .Page.IAFilename}}" target="_blank" rel="noopener"
+       title="Open full resolution on Internet Archive">
+      <img id="page-img"
+           src="{{iaThumbURL .Page.ItemID .Page.IAFilename}}"
+           alt="Page {{inc .Page.PageSeq}}"
+           class="page-image"
+           loading="lazy">
+    </a>
+    <div class="image-hint">Click image to open full resolution on Internet Archive</div>
+  </div>
+
+  <div class="page-text-panel"
+       data-pagefind-body
+       data-pagefind-meta="title:Page {{inc .Page.PageSeq}} — {{.ItemTitle}}"
+       data-pagefind-filter="item[{{.Page.ItemID}}], year[{{.ItemYear}}]">
+
+    {{if .Page.OCRText}}
+    {{if lt .Page.OCRConfidence 50.0}}
+    <div class="confidence-warning">
+      &#9888; Low OCR confidence ({{printf "%.0f" .Page.OCRConfidence}}%) &mdash; text may have errors
+    </div>
+    {{end}}
+
+    <div class="text-controls">
+      <span class="conf-score">Confidence: {{printf "%.0f" .Page.OCRConfidence}}%</span>
+    </div>
+
+    {{if .Page.CorrectedText}}
+    <div class="corrected-badge">&#10003; Human-corrected text</div>
+    <pre class="ocr-text">{{.Page.CorrectedText}}</pre>
+    {{else}}
+    <pre class="ocr-text">{{.Page.OCRText}}</pre>
+    {{end}}
+    {{else}}
+    <div class="no-ocr">
+      <p>No OCR text available for this page.</p>
+    </div>
+    {{end}}
+  </div>
+</div>
+{{end}}

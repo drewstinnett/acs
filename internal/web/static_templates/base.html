@@ -1,0 +1,28 @@
+{{define "base"}}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{.Title}}</title>
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a class="brand" href="/">ACS Archive Browser</a>
+  <div class="nav-links">
+    <a href="/">Search</a>
+    <a href="/items/">Items</a>
+  </div>
+</nav>
+<main class="container">
+{{.Body}}
+</main>
+<footer>
+  <small>American Colonization Society &mdash; <em>African Repository and Colonial Journal</em> (1825&ndash;1892)
+  &mdash; Microfilm images from <a href="https://archive.org" target="_blank" rel="noopener">Internet Archive</a></small>
+</footer>
+<script src="/pagefind/pagefind-ui.js"></script>
+{{.Scripts}}
+</body>
+</html>{{end}}

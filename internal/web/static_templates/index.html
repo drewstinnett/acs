@@ -1,0 +1,31 @@
+{{define "index-body"}}
+<div class="search-header">
+  <h1>ACS Archive Browser</h1>
+  <p class="subtitle">
+    Full-text search across OCR&rsquo;d microfilm from the
+    <em>African Repository and Colonial Journal</em> (1825&ndash;1892)
+  </p>
+  <div id="search" class="pagefind-search"></div>
+</div>
+
+<div class="stats-bar">
+  <span>{{.Stats.ItemCount}} items</span>
+  <span>{{.Stats.PageCount}} pages</span>
+  <span>{{.Stats.OCRPageCount}} pages with OCR text</span>
+</div>
+
+<div class="browse-hint">
+  <p>Or <a href="/items/">browse all items</a> by volume.</p>
+</div>
+{{end}}
+
+{{define "index-scripts"}}
+<script>
+new PagefindUI({
+  element: '#search',
+  showImages: false,
+  excerptLength: 30,
+  highlightParam: 'highlight',
+});
+</script>
+{{end}}
