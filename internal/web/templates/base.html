@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{block "title" .}}ACS Archive{{end}}</title>
+<script src="/static/htmx.min.js"></script>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<nav class="navbar">
+  <a class="brand" href="/">ACS Archive Browser</a>
+  <div class="nav-links">
+    <a href="/">Search</a>
+    <a href="/items">Items</a>
+  </div>
+</nav>
+<main class="container">
+{{block "content" .}}{{end}}
+</main>
+<footer>
+  <small>American Colonization Society &mdash; <em>African Repository and Colonial Journal</em> (1825&ndash;1892)</small>
+</footer>
+</body>
+</html>

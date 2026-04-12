@@ -1,0 +1,52 @@
+{{template "base.html" .}}
+
+{{define "title"}}ACS Archive Browser{{end}}
+
+{{define "content"}}
+<div class="search-header">
+  <h1>ACS Archive Browser</h1>
+  <p class="subtitle">Search OCR text from the <em>African Repository and Colonial Journal</em></p>
+
+  <form class="search-form" action="/search" method="get">
+    <input
+      type="search"
+      name="q"
+      id="search-input"
+      class="search-input"
+      placeholder="Search all pages…"
+      value="{{.Query}}"
+      autofocus
+      hx-get="/search"
+      hx-trigger="input changed delay:400ms, search"
+      hx-target="#results-container"
+      hx-include="[name='q'],[name='year'],[name='item']"
+    >
+    <div class="search-filters">
+      <input type="number" name="year" placeholder="Year (e.g. 1840)" value="{{.Year}}" class="filter-input">
+      <select name="item" class="filter-input">
+        <option value="">All items</option>
+        {{range .Items}}
+        <option value="{{.ID}}" {{if eq $.ItemFilter .ID}}selected{{end}}>{{.Title}} ({{.Date}})</option>
+        {{end}}
+      </select>
+    </div>
+    <button type="submit" class="btn-primary">Search</button>
+  </form>
+</div>
+
+<div class="stats-bar">
+  <span>{{.Stats.ItemCount}} items</span>
+  <span>{{.Stats.PageCount}} pages</span>
+  <span>{{.Stats.OCRPageCount}} pages with OCR text</span>
+</div>
+
+<div id="results-container">
+  {{if .Query}}
+    {{template "results-inner" .}}
+  {{else}}
+  <div class="empty-state">
+    <p>Enter a search term above, or <a href="/items">browse all items</a>.</p>
+  </div>
+  {{end}}
+</div>
+{{end}}

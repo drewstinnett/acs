@@ -1,0 +1,43 @@
+{{template "base.html" .}}
+
+{{define "title"}}{{.Item.Title}} &mdash; ACS Archive{{end}}
+
+{{define "content"}}
+<div class="item-header">
+  <h2>{{if .Item.Title}}{{.Item.Title}}{{else}}{{.Item.ID}}{{end}}</h2>
+  <div class="item-meta">
+    <span class="date-badge">{{.Item.Date}}</span>
+    <span class="status-badge status-{{.Item.DownloadStatus}}">download: {{.Item.DownloadStatus}}</span>
+    <span class="status-badge status-{{.Item.OCRStatus}}">ocr: {{.Item.OCRStatus}}</span>
+    <span>{{.Item.OCRPageCount}}/{{.Item.PageCount}} pages OCR'd</span>
+  </div>
+  {{if .Item.Description}}
+  <p class="item-desc">{{.Item.Description}}</p>
+  {{end}}
+</div>
+
+{{if .Pages}}
+<div class="pages-grid">
+  {{range .Pages}}
+  <a href="/pages/{{.ID}}" class="page-thumb {{if lt .OCRConfidence 50.0}}low-confidence{{end}}">
+    <div class="thumb-img">
+      <img src="/pages/{{.ID}}/thumb" alt="Page {{inc .PageSeq}}" loading="lazy"
+           onerror="this.style.display='none'">
+    </div>
+    <div class="thumb-label">
+      <span>Page {{inc .PageSeq}}</span>
+      {{if gt .OCRConfidence 0.0}}
+      <span class="conf" title="OCR confidence">{{printf "%.0f" .OCRConfidence}}%</span>
+      {{else}}
+      <span class="conf no-ocr">no OCR</span>
+      {{end}}
+    </div>
+  </a>
+  {{end}}
+</div>
+{{else}}
+<div class="empty-state">
+  <p>No pages found. Run <code>acs download --item {{.Item.ID}}</code> to download images.</p>
+</div>
+{{end}}
+{{end}}

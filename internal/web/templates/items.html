@@ -1,0 +1,40 @@
+{{template "base.html" .}}
+
+{{define "title"}}Items &mdash; ACS Archive{{end}}
+
+{{define "content"}}
+<h2>All Items</h2>
+{{if .Items}}
+<table class="items-table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Date</th>
+      <th>Pages</th>
+      <th>Download</th>
+      <th>OCR</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{range .Items}}
+  <tr>
+    <td><a href="/items/{{.ID}}">{{if .Title}}{{.Title}}{{else}}{{.ID}}{{end}}</a></td>
+    <td>{{.Date}}</td>
+    <td>{{.PageCount}}</td>
+    <td><span class="status-badge status-{{.DownloadStatus}}">{{.DownloadStatus}}</span></td>
+    <td>
+      <span class="status-badge status-{{.OCRStatus}}">{{.OCRStatus}}</span>
+      {{if .PageCount}}
+      <span class="ocr-progress">({{.OCRPageCount}}/{{.PageCount}})</span>
+      {{end}}
+    </td>
+  </tr>
+  {{end}}
+  </tbody>
+</table>
+{{else}}
+<div class="empty-state">
+  <p>No items yet. Run <code>acs search "african repository" --save</code> to discover items.</p>
+</div>
+{{end}}
+{{end}}

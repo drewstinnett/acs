@@ -1,0 +1,92 @@
+{{template "base.html" .}}
+
+{{define "title"}}Page {{inc .Page.PageSeq}} &mdash; {{.ItemTitle}} &mdash; ACS Archive{{end}}
+
+{{define "content"}}
+<div class="page-nav">
+  {{if .PrevID}}
+  <a href="/pages/{{.PrevID}}" class="btn-nav">&laquo; Prev</a>
+  {{else}}
+  <span class="btn-nav disabled">&laquo; Prev</span>
+  {{end}}
+
+  <span class="page-loc">
+    <a href="/items/{{.Page.ItemID}}">{{.ItemTitle}}</a>
+    &mdash; Page {{inc .Page.PageSeq}}
+  </span>
+
+  {{if .NextID}}
+  <a href="/pages/{{.NextID}}" class="btn-nav">Next &raquo;</a>
+  {{else}}
+  <span class="btn-nav disabled">Next &raquo;</span>
+  {{end}}
+</div>
+
+<div class="page-viewer">
+  <div class="page-image-panel">
+    <img id="page-img" src="/pages/{{.Page.ID}}/image" alt="Page {{inc .Page.PageSeq}}"
+         class="page-image" title="Click to zoom">
+    <div class="image-hint">Click image to zoom</div>
+  </div>
+
+  <div class="page-text-panel" id="text-panel">
+    {{if .Page.OCRText}}
+    {{if lt .Page.OCRConfidence 50.0}}
+    <div class="confidence-warning">
+      &#9888; Low OCR confidence ({{printf "%.0f" .Page.OCRConfidence}}%) &mdash; text may have errors
+    </div>
+    {{end}}
+
+    <div class="text-controls">
+      <span class="conf-score">Confidence: {{printf "%.0f" .Page.OCRConfidence}}%</span>
+      <button class="btn-edit" onclick="showEditor()">Edit</button>
+    </div>
+
+    <div id="text-display">
+      {{if .Page.CorrectedText}}
+      <div class="corrected-badge">&#10003; Corrected text</div>
+      <pre class="ocr-text">{{.Page.CorrectedText}}</pre>
+      {{else}}
+      <pre class="ocr-text">{{.Page.OCRText}}</pre>
+      {{end}}
+    </div>
+
+    <div id="text-editor" style="display:none">
+      <form hx-post="/pages/{{.Page.ID}}/correction" hx-target="#text-panel" hx-swap="outerHTML">
+        <textarea name="text" class="correction-textarea">{{if .Page.CorrectedText}}{{.Page.CorrectedText}}{{else}}{{.Page.OCRText}}{{end}}</textarea>
+        <div class="editor-buttons">
+          <button type="submit" class="btn-primary">Save correction</button>
+          <button type="button" class="btn-cancel" onclick="hideEditor()">Cancel</button>
+        </div>
+      </form>
+    </div>
+    {{else}}
+    <div class="no-ocr">
+      <p>No OCR text yet.</p>
+      <p>Run <code>acs ocr --item {{.Page.ItemID}}</code> to process this item.</p>
+    </div>
+    {{end}}
+  </div>
+</div>
+
+<script>
+(function() {
+  var img = document.getElementById('page-img');
+  var zoomed = false;
+  img.addEventListener('click', function() {
+    zoomed = !zoomed;
+    img.classList.toggle('zoomed', zoomed);
+  });
+})();
+
+function showEditor() {
+  document.getElementById('text-display').style.display = 'none';
+  document.getElementById('text-editor').style.display = 'block';
+}
+
+function hideEditor() {
+  document.getElementById('text-editor').style.display = 'none';
+  document.getElementById('text-display').style.display = 'block';
+}
+</script>
+{{end}}

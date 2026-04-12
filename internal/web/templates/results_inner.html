@@ -1,0 +1,22 @@
+{{define "results-inner"}}
+{{if .Results}}
+<div class="results-count">{{len .Results}} result{{if ne (len .Results) 1}}s{{end}} for &ldquo;{{.Query}}&rdquo;</div>
+<ul class="results-list">
+  {{range .Results}}
+  <li class="result-card">
+    <div class="result-meta">
+      <a href="/items/{{.ItemID}}" class="item-link">{{.ItemTitle}}</a>
+      <span class="date-badge">{{.ItemDate}}</span>
+      <a href="/pages/{{.PageID}}" class="page-link">Page {{inc .PageSeq}}</a>
+    </div>
+    <div class="result-snippet">{{snippetHTML .Snippet}}</div>
+  </li>
+  {{end}}
+</ul>
+{{else if .Query}}
+<div class="empty-state">
+  <p>No results found for &ldquo;{{.Query}}&rdquo;.</p>
+  <p>Try different search terms, or check that OCR has been run (<code>acs ocr</code>).</p>
+</div>
+{{end}}
+{{end}}
