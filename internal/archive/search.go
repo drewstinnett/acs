@@ -10,14 +10,18 @@ import (
 )
 
 // SearchResult is one item returned by the IA search API.
+//
+// Every field other than Identifier is typed FlexStrings because IA's
+// advanced-search endpoint returns multi-valued metadata as either a bare
+// string or a JSON array depending on cardinality.
 type SearchResult struct {
-	Identifier  string   `json:"identifier"`
-	Title       string   `json:"title"`
-	Description string   `json:"description"`
-	Date        string   `json:"date"`
-	Subject     []string `json:"subject"`
-	Creator     string   `json:"creator"`
-	Language    string   `json:"language"`
+	Identifier  string      `json:"identifier"`
+	Title       FlexStrings `json:"title"`
+	Description FlexStrings `json:"description"`
+	Date        FlexStrings `json:"date"`
+	Subject     FlexStrings `json:"subject"`
+	Creator     FlexStrings `json:"creator"`
+	Language    FlexStrings `json:"language"`
 }
 
 type iaSearchResponse struct {

@@ -39,11 +39,11 @@ var searchCmd = &cobra.Command{
 		tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 		fmt.Fprintln(tw, "IDENTIFIER\tTITLE\tDATE")
 		for _, r := range results {
-			title := r.Title
+			title := r.Title.First()
 			if len(title) > 60 {
 				title = title[:57] + "..."
 			}
-			fmt.Fprintf(tw, "%s\t%s\t%s\n", r.Identifier, title, r.Date)
+			fmt.Fprintf(tw, "%s\t%s\t%s\n", r.Identifier, title, r.Date.First())
 		}
 		tw.Flush()
 		fmt.Printf("\n%d result(s)\n", len(results))
@@ -57,14 +57,14 @@ var searchCmd = &cobra.Command{
 
 			saved := 0
 			for _, r := range results {
-				year := extractYear(r.Date)
+				date := r.Date.First()
 				it := store.Item{
 					ID:          r.Identifier,
-					Title:       r.Title,
-					Description: r.Description,
-					Date:        r.Date,
-					Year:        year,
-					Subject:     r.Subject,
+					Title:       r.Title.First(),
+					Description: r.Description.First(),
+					Date:        date,
+					Year:        extractYear(date),
+					Subject:     []string(r.Subject),
 				}
 				if err := db.UpsertItem(it); err != nil {
 					log.Warn("failed to save item", "id", r.Identifier, "err", err)
